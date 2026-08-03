@@ -79,7 +79,6 @@ struct PathRange
 struct TrajectoryShiftParams
 {
   double minimum_shift_length{0.1};      // [m] lateral offset threshold to trigger shift
-  double minimum_shift_yaw{0.1};         // [rad] yaw deviation threshold to trigger shift
   double minimum_shift_distance{5.0};    // [m] floor for shift distance
   double min_speed_for_curvature{2.77};  // [m/s] lower bound on speed for kappa0 computation
   double lateral_accel_limit{0.5};       // [m/s^2] allowed lateral acceleration budget
@@ -251,6 +250,13 @@ PathRange<std::optional<double>> get_arc_length_on_centerline(
   const std::optional<double> & s_right_bound);
 
 /**
+ * @brief Recreate the path with a given goal pose
+ */
+PathPointTrajectory refine_path_for_goal(
+  const PathPointTrajectory & input, const geometry_msgs::msg::Pose & goal_pose,
+  const lanelet::Id goal_lane_id, const double search_radius_range, const double pre_goal_offset);
+
+/**
  * @brief Extract lanelets from the trajectory
  */
 lanelet::ConstLanelets extract_lanelets_from_trajectory(
@@ -266,6 +272,13 @@ bool is_in_lanelets(const geometry_msgs::msg::Pose & pose, const lanelet::ConstL
  */
 bool is_trajectory_inside_lanelets(
   const PathPointTrajectory & refined_path, const lanelet::ConstLanelets & lanelets);
+
+/**
+ * @brief Modify path for smooth goal connection
+ */
+std::optional<PathPointTrajectory> modify_path_for_smooth_goal_connection(
+  const PathPointTrajectory & trajectory, const RouteContext & planner_data,
+  const double search_radius_range, const double pre_goal_offset);
 
 }  // namespace utils
 }  // namespace autoware::minimum_rule_based_planner
