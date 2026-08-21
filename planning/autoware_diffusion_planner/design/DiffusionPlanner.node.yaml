@@ -59,6 +59,12 @@ publishers:
   - name: guidance_status
     message_type: autoware_internal_debug_msgs/msg/StringStamped
     remap_target: ~/debug/guidance_status
+  - name: bev_image_50m
+    message_type: sensor_msgs/msg/Image
+    remap_target: ~/debug/bev_image_50m
+  - name: bev_image_200m
+    message_type: sensor_msgs/msg/Image
+    remap_target: ~/debug/bev_image_200m
 # parameters
 param_files:
   - name: diffusion_planner_param
